@@ -6,15 +6,15 @@ import com.restore.restore.dto.response.UserResponse;
 import com.restore.restore.entity.User;
 import com.restore.restore.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/user")
-public class UserController {
+public class AuthController {
     @Autowired(required = true)
     private UserService userService;
 
@@ -41,7 +41,7 @@ public class UserController {
         ApiResponse apiResponse=new ApiResponse();
 
         apiResponse.setHttpStatus(HttpStatus.ACCEPTED);
-        apiResponse.setMessage("Employee saved successfully");
+        apiResponse.setMessage("User details saved successfully");
         apiResponse.setData(id);
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(apiResponse);
@@ -50,26 +50,27 @@ public class UserController {
     public ResponseEntity<?> update(@PathVariable("id")int id, @RequestBody UserRequest userRequest){
         String updatedId = userService.update(id, userRequest);
         ApiResponse response = new ApiResponse();
-        response.setMessage("Employee updated successfully");
+        response.setMessage("User details updated successfully");
         response.setHttpStatus(HttpStatus.OK);
         response.setData(updatedId);
 
         return ResponseEntity.ok(response);
     }
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteEmployee(@PathVariable("id")int id){
-        userService.deleteById(id);
-        return ResponseEntity.ok("Employee deleted successfully");
+    public ResponseEntity<?> deleteUser(@PathVariable("id")int id){
+        userService.delete(id);
+        return ResponseEntity.ok("User details deleted successfully");
     }
     @GetMapping("/get/{id}")
-    public ResponseEntity<UserResponse> getEmployee(@PathVariable("id")int id){
-        UserResponse userResponseDTO = userService.getById(id);
+    public ResponseEntity<UserResponse> getUser(@PathVariable("id")int id){
+        UserResponse userResponseDTO = userService.getUser(id);
         return ResponseEntity.ok(userResponseDTO);
     }
     @GetMapping("/get-all")
-    public ResponseEntity<?> getAll(){
-        List<User> all = userService.getAll();
+    public ResponseEntity<?> getAll(Pageable pageable) {
+        Page<User> all = userService.getAllUsers(pageable);
         return ResponseEntity.ok(all);
     }
+
 
 }
