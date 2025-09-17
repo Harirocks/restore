@@ -41,7 +41,7 @@ public class DoctorController {
         ApiResponse apiResponse=new ApiResponse();
 
         apiResponse.setHttpStatus(HttpStatus.ACCEPTED);
-        apiResponse.setMessage("Doctor saved successfully");
+        apiResponse.setMessage("Doctor details saved successfully");
         apiResponse.setData(id);
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(apiResponse);
