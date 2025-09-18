@@ -1,10 +1,14 @@
 package com.restore.restore.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.restore.restore.domain.Role;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -16,32 +20,40 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int userId;
-    @Column(nullable = false)
-    @NotBlank(message = "enter your valid name")
+    private Long userId;
+
+    @Column(nullable = false, unique = true)
+    @NotBlank(message = "Enter your valid username")
     private String userName;
+
     @Column(nullable = false)
-    @NotBlank(message = "enter your gender")
+    @NotBlank(message = "Enter your gender")
     private String gender;
+
     @Column(nullable = false)
-    @NotNull(message = "enter your present age")
-    private int age;
-    @Column(nullable = false)
-    @NotBlank(message = "enter your valid email")
+    @NotNull(message = "Enter your present age")
+    private Integer age;
+
+    @Column(nullable = false, unique = true)
+    @Email(message = "Enter a valid email")
     private String email;
+
     @Column(nullable = false)
-    @NotBlank(message = "enter your password")
+    @NotBlank(message = "Enter your password")
     private String password;
-    @Column(nullable = false)
-    @NotNull(message = "enter your valid phone number")
-    private long phoneNo;
-    @Column(nullable = false)
-    @NotBlank(message = "enter your role")
-    private String role;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
-    private List<Appointment> appointmentList;
 
+    @Column(nullable = false, unique = true)
+    @NotBlank(message = "Enter your valid phone number")
+    private String phoneNo;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Appointment> appointmentList = new ArrayList<>();
 }

@@ -9,7 +9,7 @@ public class UserRequest {
     private int age;
     private String email;
     private String password;
-    private long phoneNo;
+    private String phoneNo;
     private String role;
 
 }
